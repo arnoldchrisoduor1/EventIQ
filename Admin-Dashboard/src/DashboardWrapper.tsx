@@ -10,9 +10,8 @@ const Dashboardlayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className="flex w-full">
             <Sidebar />
-            <main className={`flex flex-col w-full h-full bg-gray-100 transition-all duration-300 ${isSidebarOpen ? 'pl-24 md:pl-60' : 'pl-6 md:pl-28'}`}>
+            <main className={`flex flex-col w-full h-screen bg-gray-100 transition-all duration-300 ${isSidebarOpen ? 'pl-24 md:pl-52' : 'pl-6 md:pl-28'}`}>
                 {children}
-                {/* <SignUp /> */}
             </main>
         </div>
     )

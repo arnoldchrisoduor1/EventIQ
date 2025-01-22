@@ -4,7 +4,7 @@ import { Power } from 'lucide-react';
 
 const Sidebar = () => {
   return (
-    <div className="h-screen w-[200px] fixed top-0 left-0 p-4 bg-white">
+    <div className="h-screen w-[200px] fixed top-0 left-0 p-4 bg-gradientto-t from-customBlue to-white">
         {/* Top Profile Section */}
         <div className="w-full flex flex-col items-center mt-10 mb-10 gap-3">
             <div className="h-12 w-12 rounded-full">

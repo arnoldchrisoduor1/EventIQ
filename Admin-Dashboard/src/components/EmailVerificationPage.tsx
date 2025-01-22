@@ -82,7 +82,7 @@ const EmailVerificationPage: React.FC = () => {
                 value={digit}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-12 h-12 text-center text-2xl font-bold bg-gray-100 text-customBlue border-2 border-gray-600 rounded-lg focus:border-customBlue focus:outline-none"
+                className="w-12 h-12 text-center text-2xl font-bold bg-gray-400 text-customBlue border-2 border-gray-600 rounded-lg focus:border-customBlue focus:outline-none"
               />
             ))}
           </div>
