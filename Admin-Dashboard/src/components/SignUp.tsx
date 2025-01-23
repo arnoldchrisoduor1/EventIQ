@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputComponent from "./InputComponent";
 import { User, Mail, Lock } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useAppDispatch } from "../redux/hooks/hooks";
 import { signup } from "../redux/slices/authSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import toast, { Toaster } from "react-hot-toast";
+import PasswordStrengthMeter from "./PasswordStrengthMeter";
 
 const SignUp: React.FC = () => {
+
+  const { error, isLoading, isAuthenticated } = useSelector((state: RootState) => state.auth);
+
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -19,15 +26,32 @@ const SignUp: React.FC = () => {
     e.preventDefault();
 
     try {
-      dispatch(signup({ firstname, lastname, email, password }));
-      navigate("/verify-email");
+      const response = dispatch(signup({ firstname, lastname, email, password }));
+      console.log("Sign up response: ", response);
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
+  useEffect(() => {
+    if(isLoading) {
+      toast.loading("Creating account...");
+    }
+    if(isAuthenticated) {
+      toast.dismiss();
+      toast.success("Sign up successful. Check your email for a verification code.");
+      navigate("/verify-email");
+    }
+    if(error != null) {
+      toast.dismiss();
+      toast.error(error);
+    }
+  }, [isLoading, isAuthenticated, navigate, error]);
+
   return (
+    <>
+    <Toaster position="top-right" reverseOrder={false} />
       <div className="inline-block border-2 bg-white bg-opacity-60 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl p-8">
         <div className="flex flex-col gap-4">
           <div>
@@ -72,10 +96,13 @@ const SignUp: React.FC = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 classwidth="placeholder-black/50"
               />
+
+              {/* { error && <p className="text-red-500 font-semibold mt-2">{error}</p> } */}
+              <PasswordStrengthMeter password={password} />
               <div>
               <button
                 type="submit"
-                className="btn px-6 py-2 w-[60%] bg-customBlue/80 text-white rounded-md hover:bg-customBlue transition duration-custom"
+                className="btn px-6 py-2 w-[60%] bg-customBlue/80 text-white rounded-md hover:bg-customBlue transition duration-custom mt-2"
               >
                 Get Started
               </button>
@@ -92,6 +119,7 @@ const SignUp: React.FC = () => {
           </div>
         </div>
       </div>
+    </>
   );
 };
 

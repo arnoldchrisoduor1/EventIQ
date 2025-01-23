@@ -9,6 +9,7 @@ axios.defaults.withCredentials = true;
 interface AuthState {
     user: any | null;
     isAuthenticated: boolean;
+    isVerified: boolean;
     isLoading: boolean;
     isCheckingAuth: boolean;
     error: string | null;
@@ -126,6 +127,7 @@ export const resetPassword = createAsyncThunk (
 const initialState: AuthState = {
     user: null,
     isAuthenticated: false,
+    isVerified: false,
     isLoading: false,
     isCheckingAuth: true,
     error: null,
@@ -164,6 +166,7 @@ const authSlice = createSlice({
             state.user = action.payload.user;
             state.isLoading = false;
             state.isAuthenticated = true;
+            state.isVerified = true;
         });
         builder.addCase(verifyEmail.rejected, (state, action) => {
             state.isLoading = false;
@@ -192,7 +195,7 @@ const authSlice = createSlice({
         });
         builder.addCase(checkAuth.fulfilled, (state, action) => {
             state.user = action.payload.user;
-            state.isAuthenticated = true;
+            state.isAuthenticated = false;
             state.isCheckingAuth = false;
         });
         builder.addCase(checkAuth.rejected, (state) => {
