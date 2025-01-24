@@ -8,7 +8,6 @@ body {
   @apply font-sans;
 }
 
-
 @layer components {
   .btn-primary {
     @apply bg-customBlue/80 text-white py-2 px-4 rounded-full hover:bg-customBlue transition duration-custom;
@@ -19,6 +18,10 @@ body {
   }
 
   .floating-card {
-    @apply shadow-lg shadow-gray-400/50 hover:shadow-xl transition-shadow duration-300;
+    @apply shadow-md shadow-gray-400/50 hover:shadow-xl transition-shadow duration-custom;
+  }
+
+  .gray-header {
+    @apply text-start text-xl text-black/50 mb-6;
   }
 }
