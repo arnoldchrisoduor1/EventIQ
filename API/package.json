@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@types/nodemailer": "^6.4.17",
+    "aws-sdk": "^2.1692.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
@@ -14,6 +15,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
+    "nanoid": "^3.3.8",
     "nodemailer": "^6.9.16"
   },
   "devDependencies": {

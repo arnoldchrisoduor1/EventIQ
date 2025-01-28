@@ -3,6 +3,8 @@ import backgorundImage from '../assets/img/eventsBanner1.jpg';
 import SignUp from '../components/SignUp';
 import Login from '../components/Login';
 import EmailVerificationPage from '../components/EmailVerificationPage';
+import ForgotPassword from '../components/ForgotPassword';
+import ResetPasswordPage from '../components/ResetPasswordPage';
 
 
 const Authentication = () => {
@@ -24,11 +26,19 @@ const Authentication = () => {
             <div>
                 <Login />
             </div>
-            ) : (
+            ) : path === "/forgot-password" ? (
+                <div>
+                    <ForgotPassword />
+                </div>
+            ) : path.startsWith("/reset-password") ? (
+                <div>
+                    <ResetPasswordPage />
+                </div>
+            ) : path === "/verify-email" ? (
                 <div>
                     <EmailVerificationPage />
                 </div>
-            )}
+            ) : ( <div>No route </div>)}
         </div>
     </div>
   )

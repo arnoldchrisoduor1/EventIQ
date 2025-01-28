@@ -147,6 +147,75 @@ export const login = async (req: Request<{}, {}, LoginRequest>, res: Response) :
     }
 }
 
+export const updateProfile = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const userId = req.userId;
+      if (!userId) {
+        res.status(401).json({ message: 'Unauthorized' });
+        console.log("updateProfile - could not get userId");
+        return;
+      }
+  
+      const { 
+        firstname, 
+        lastname, 
+        social_links,
+        profilePhoto,
+        mobilenumber,
+        address,
+        occupation
+      } = req.body;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        console.log("updateProfile - could not find user with this id");
+        return;
+      }
+  
+      // Update allowed fields
+      if (firstname) user.firstname = firstname;
+      if (lastname) user.lastname = lastname;
+      if (mobilenumber) user.mobilenumber = mobilenumber;
+      if (address) user.address = address;
+      if (occupation) user.occupation = occupation;
+  
+      // Update social links if provided
+      if (social_links) {
+        user.social_links = {
+          youtube: social_links.youtube ?? user.social_links?.youtube ?? '',
+          instagram: social_links.instagram ?? user.social_links?.instagram ?? '',
+          facebook: social_links.facebook ?? user.social_links?.facebook ?? '',
+          twitter: social_links.twitter ?? user.social_links?.twitter ?? '',
+          website: social_links.website ?? user.social_links?.website ?? ''
+        };
+      }
+
+      if(profilePhoto) {
+        user.profileImage = profilePhoto;
+      }
+  
+      // Save the updated user
+      await user.save();
+  
+      const userObject = user.toObject();
+        delete (userObject as any).password;
+
+        res.status(201).json({
+            success: true,
+            message: "Prodile Updated Successfully",
+            user: userObject
+        });
+        console.log("updateProfile - profile updated successfully");
+    } catch (error) {
+      console.error('Profile update error:', error);
+      res.status(500).json({ message: 'Could not update profile' });
+    }
+  };
+
+
 // ================== Logout Logic ================
 export const logout = async(req: Request, res: Response) => {
     res.clearCookie("token");

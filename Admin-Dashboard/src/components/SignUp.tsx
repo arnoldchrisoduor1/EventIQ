@@ -52,7 +52,7 @@ const SignUp: React.FC = () => {
   return (
     <>
     <Toaster position="top-right" reverseOrder={false} />
-      <div className="inline-block border-2 bg-white bg-opacity-60 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl p-8">
+      <div className="inline-block border-2 blurry-white-card p-8">
         <div className="flex flex-col gap-4">
           <div>
             <h1 className="text-3xl font-semibold">Join Event<span className="text-customBlue">IQ</span></h1>

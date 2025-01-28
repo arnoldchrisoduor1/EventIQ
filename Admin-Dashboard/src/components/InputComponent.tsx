@@ -10,6 +10,7 @@ interface InputComponentTypes {
   Icon: React.ComponentType<LucideProps>;
   isPassword?: boolean;
   value: string;
+  name?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -21,14 +22,15 @@ const InputComponent: React.FC<InputComponentTypes> = ({
   isPassword,
   value,
   onChange,
+  name
 }) => {
   const [hide, setHide] = useState(isPassword || false);
 
   return (
     <div className="inline-block">
-      <div className="flex items-center gap-3 m-2 border border-slate-300 p-2 rounded-lg">
+      <div className="flex items-center gap-3 m-2 border border-slate-500 p-2 rounded-lg">
         {/* Leading Icon */}
-        <div className="text-slate-600">
+        <div className="text-slate-500">
           <Icon />
         </div>
         {/* Input Field */}
@@ -39,6 +41,7 @@ const InputComponent: React.FC<InputComponentTypes> = ({
             className={twMerge(`bg-transparent outline-none w-full`, classwidth)}
             value={value}
             onChange={onChange}
+            name={name}
           />
         </div>
         {/* Password Toggle */}

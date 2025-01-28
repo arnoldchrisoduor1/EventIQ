@@ -10,7 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 const Login: React.FC = () => {
 
-  const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isLoading, error, isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,11 +23,14 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = dispatch(login({ email, password }));
-      console.log("Login Response: ", response);
+      const resultAction = await dispatch(login({ email, password }));
+      if (login.fulfilled.match(resultAction)) {
+        console.log("Login successful", resultAction.payload);
+      } else {
+        console.error("Login failed", resultAction);
+      }
     } catch (error) {
-      console.log(error);
-      throw error;
+      console.error("Login error", error);
     }
   };
 
@@ -39,17 +42,18 @@ const Login: React.FC = () => {
       toast.dismiss();
       toast.success('Logged In!')
       navigate("/");
+      console.log("User3", user);
     }
     if(error != null) {
       toast.dismiss();
       toast.error(error);
     }
-  }, [error, isLoading, isAuthenticated, navigate]);
+  }, [error, isLoading, isAuthenticated, navigate, user]);
 
   return (
     <>
     <Toaster position="top-right" reverseOrder={false} />
-    <div className="inline-block border-2 bg-white bg-opacity-60 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl p-8">
+    <div className="inline-block border-2 blurry-white-card p-8">
       <div className="flex flex-col gap-4">
         <div>
           <h1 className="text-3xl font-semibold">Welcome Back</h1>
@@ -75,6 +79,7 @@ const Login: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
               classwidth="placeholder-black/50"
             />
+            <p className="text-start ml-2">Forgot password ? <Link to="/forgot-password" className="text-customBlue">Reset Now</Link></p>
             <div>
             <button
               type="submit"

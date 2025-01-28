@@ -14,9 +14,28 @@ interface AuthState {
     isCheckingAuth: boolean;
     error: string | null;
     message: string | null;
+    profileImageUrl: string | null;
+    token: string | null;
 }
 
+const initialState: AuthState = {
+    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
+    token: localStorage.getItem('token') || null,
+    isAuthenticated: !!localStorage.getItem('user'),
+    isVerified: localStorage.getItem('user') 
+        ? JSON.parse(localStorage.getItem('user')!)?.isVerified 
+        : false,
+    isLoading: false,
+    isCheckingAuth: true,
+    error: null,
+    message: null,
+    profileImageUrl: localStorage.getItem('user') 
+        ? JSON.parse(localStorage.getItem('user')!)?.profileImage 
+        : null,
+};
+
 // ============== Sign Up Logic =========================== //
+// Modify signup thunk to store user and token
 export const signup = createAsyncThunk(
     'auth/signup',
     async({ firstname, lastname, email, password }: { 
@@ -26,22 +45,19 @@ export const signup = createAsyncThunk(
         password: string 
     }, {rejectWithValue}) => {
         try {
-            // Log as an object to clearly see the structure
-            console.log("signing in with the following details:", {
-                firstname,
-                lastname,
-                email,
-                password
+            const response = await axios.post(`${API_URL}/auth/signup`, { 
+                firstname, 
+                lastname, 
+                email, 
+                password 
             });
             
-            const payload = { firstname, lastname, email, password };
-            console.log("Request payload:", payload);  // Add this to verify payload
+            // Store user and token in local storage
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            localStorage.setItem('token', response.data.token);
             
-            const response = await axios.post(`${API_URL}/auth/signup`, payload);
-            console.log("Sign Up response: ", response.data);
             return response.data;
         } catch (error: any) {
-            console.log("Error details:", error.response?.data);  // Add this to see detailed error
             return rejectWithValue(error.response?.data?.message || 'Error signing up');
         }
     }
@@ -67,10 +83,75 @@ export const login = createAsyncThunk(
     'auth/login',
     async({ email, password } : { email: string; password: string; }, { rejectWithValue }) => {
         try {
-            const response = await axios.post(`${API_URL}/auth/login`, { email, password });
+            const response = await axios.post(
+                `${API_URL}/auth/login`, 
+                { email, password },
+                { withCredentials: true } // Important for handling cookies
+            );
+            
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            
             return response.data;
         } catch(error: any) {
             return rejectWithValue(error.response?.data?.message || 'Error logging in');
+        }
+    }
+);
+
+//  ============ Uploading images to aws s3 buckets ============= //
+
+export const uploadImage = createAsyncThunk(
+    'auth/uploadImg',
+    async({ img } : { img: any }, {rejectWithValue}) => {
+        let imgUrl = null;
+        
+        try {
+            const response = await axios.get(`${API_URL}/auth/image-url`);
+            const uploadURL = response.data.uploadURL;
+            
+            // Safe logging
+            if (img instanceof File) {
+                console.log("File before upload: ", {
+                    name: img.name,
+                    type: img.type,
+                    size: img.size
+                });
+            } else {
+                console.log("Uploaded object is not a File:", img);
+            }
+            
+            await axios({
+                method: 'PUT',
+                url: uploadURL,
+                headers: { 
+                    'Content-Type': img.type || 'multipart/form-data'
+                },
+                data: img
+            });
+            
+            imgUrl = uploadURL.split("?")[0];
+            console.log("Uploaded image url: ", imgUrl);
+        } catch (error: any) {
+            console.error("Error uploading image:", error);
+            return rejectWithValue(error.response?.data?.message || 'Error Uploading Image');
+        }
+        
+        return imgUrl;
+    }
+)
+
+// ================ Updating Profile Logic ================== //
+export const updateprofile = createAsyncThunk(
+    'auth/update-profile',
+    async ({ firstname, lastname, email, address, mobilenumber, profilePhoto, occupation }: { firstname: string; lastname: string; email: string; address: string; mobilenumber: string; profilePhoto: string; occupation: string }, { rejectWithValue }) => {
+        try {
+            console.log("profile photo",profilePhoto);
+            const response = await axios.put(`${API_URL}/auth/update-profile`, { firstname, lastname, email, address, mobilenumber, profilePhoto, occupation }, {withCredentials: true});
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            return response.data;
+        } catch (error: any) {
+            console.log("Could not update profile: ", error);
+            return rejectWithValue(error.response?.data?.message || 'Error updating details')
         }
     }
 );
@@ -79,11 +160,14 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
     try {
         await axios.post(`${API_URL}/auth/logout`);
+        
+        // Clear local storage
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
     } catch(error: any) {
-        return rejectWithValue(error || 'Error loggin out');
+        return rejectWithValue(error || 'Error logging out');
     }
 });
-
 // ===================== Checking if the user is Authenticated =============
 export const checkAuth = createAsyncThunk('auth/checkAuth', async(_, { rejectWithValue }) => {
     try {
@@ -123,17 +207,6 @@ export const resetPassword = createAsyncThunk (
     }
 )
 
-// Initial State
-const initialState: AuthState = {
-    user: null,
-    isAuthenticated: false,
-    isVerified: false,
-    isLoading: false,
-    isCheckingAuth: true,
-    error: null,
-    message: null,
-};
-
 
 // ============== Auth Slice ===========================
 const authSlice = createSlice({
@@ -149,12 +222,42 @@ const authSlice = createSlice({
         });
         builder.addCase(signup.fulfilled, (state, action) => {
             state.user = action.payload.user;
+            state.token = action.payload.token;
             state.isAuthenticated = true;
             state.isLoading = false;
         });
         builder.addCase(signup.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.payload as string;
+        });
+
+        // Uploading images to aws.
+        builder.addCase(uploadImage.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        })
+        builder.addCase(uploadImage.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.profileImageUrl = action.payload as string;
+        })
+        builder.addCase(uploadImage.rejected, (state, action) => {
+            state.error = action.payload as string;
+            state.isLoading = false;
+        })
+
+        // Handling Updating user profile.
+        builder.addCase(updateprofile.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        })
+        builder.addCase(updateprofile.fulfilled, (state, action) => {
+            state.user = action.payload.user;
+            console.log("Updated user", action.payload.user)
+            state.isLoading = false;
+        })
+        builder.addCase(updateprofile.rejected, (state, action) => {
+            state.error = action.payload as string;
+            state.isLoading = false;
         })
 
         // Handling the email verification.
@@ -180,8 +283,10 @@ const authSlice = createSlice({
         });
         builder.addCase(login.fulfilled, (state, action) => {
             state.user = action.payload.user;
+            state.token = action.payload.token;
             state.isAuthenticated = true;
             state.isLoading = false;
+            state.isVerified = action.payload.user.isVerified;
         });
         builder.addCase(login.rejected, (state, action) => {
             state.isLoading = false;
@@ -193,10 +298,11 @@ const authSlice = createSlice({
             state.isCheckingAuth = true;
             state.error = null;
         });
-        builder.addCase(checkAuth.fulfilled, (state, action) => {
-            state.user = action.payload.user;
+        builder.addCase(logout.fulfilled, (state) => {
+            state.user = null;
+            state.token = null;
             state.isAuthenticated = false;
-            state.isCheckingAuth = false;
+            state.isVerified = false;
         });
         builder.addCase(checkAuth.rejected, (state) => {
             state.isCheckingAuth = false;

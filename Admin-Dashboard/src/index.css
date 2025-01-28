@@ -24,4 +24,8 @@ body {
   .gray-header {
     @apply text-start text-xl text-black/50 mb-6;
   }
+
+  .blurry-white-card {
+    @apply bg-white bg-opacity-60 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl;
+  }
 }

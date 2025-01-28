@@ -14,6 +14,8 @@ function App() {
           <Route path = "/signup" element={<Authentication />} />
           <Route path = "/login" element={<Authentication />} />
           <Route path = "/verify-email" element={<Authentication />} />
+          <Route path = "/reset-password/:token?" element={<Authentication />} />
+          <Route path = "/forgot-password" element={<Authentication />} />
           <Route path = "/user-details" element={<UserDetailsPage />} />
         </Routes>
       </DashboardWrapper>

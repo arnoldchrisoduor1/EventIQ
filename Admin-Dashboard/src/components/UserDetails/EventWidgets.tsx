@@ -29,7 +29,7 @@ const EventWidget: React.FC<EventWidgets> = ({ Icon, title, value, symbol, iconC
 
 const EventWidgets = () => {
   return (
-    <div className="flex justify-between">
+    <div className="flex flex-wrap justify-between">
       {eventWidgetsData.widgets.map((widget, index) => {
         const WidgetIcon = widget.icon;
         return (

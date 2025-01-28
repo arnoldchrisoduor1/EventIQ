@@ -1,5 +1,4 @@
 import { Facebook, Twitter, X, Youtube } from "lucide-react";
-import profilePhoto from "../../assets/img/profile.jpg";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { setEditProfileState } from "../../redux/slices/editProfileSlice";
 import { useSelector } from "react-redux";
@@ -8,6 +7,7 @@ import { RootState } from "../../redux/store";
 const PersonalInfoCard = () => {
 
   const { editState } = useSelector((state: RootState) => state.editProf);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useAppDispatch();
 
@@ -21,17 +21,17 @@ const PersonalInfoCard = () => {
         <div className="flex flex-1 bassis-1/4 flex-col justify-center items-center">
           <div className="p-1 bg-customBlue/50 rounded-full">
             <img
-              src={profilePhoto}
+              src={user.profileImage}
               alt="Profile Picture"
               className="h-16 w-16 rounded-full"
             />
           </div>
           <div className="flex flex-col gap-3 mt-6">
             <div>
-              <p className="font-semibold text-2xl">Arnold Chris</p>
+              <p className="font-semibold text-2xl">{user.firstname} {user.lastname}</p>
             </div>
             <div>
-              <p className="text-black/50">Event Manager <span className="text-black">@EventsIQ ltd</span></p>
+              <p className="text-black/50">Occupation <span className="text-black">{user.occupation}</span></p>
             </div>
             <div className="text-black/50">Member since <span className="text-black">13/04/2024</span></div>
           </div>
@@ -61,15 +61,15 @@ const PersonalInfoCard = () => {
             <div className="grid grid-cols-3">
               <div>
                 <p className="text-black">Email</p>
-                <p>arnoldchrisoduor@gmail.com</p>
+                <p>{user.email}</p>
               </div>
               <div>
                 <p className="text-black">Phone Number</p>
-                <p>+254 791 165</p>
+                <p>{user.mobilenumber}</p>
               </div>
               <div>
                 <p className="text-black">Address</p>
-                <p>946 Melvina Coves, CA, Mountain View</p>
+                <p>{user.address}</p>
               </div>
             </div>
           </div>
@@ -82,11 +82,11 @@ const PersonalInfoCard = () => {
             <div className="grid grid-cols-3">
               <div>
                 <p className="text-black">FaceBook</p>
-                <p>Facebook.com/arnoldchris</p>
+                <p>{user.facebook}</p>
               </div>
               <div>
                 <p className="text-black">Phone Number</p>
-                <p>+254 791 165</p>
+                <p>{user.mobilenumber}</p>
               </div>
             </div>
           </div>
