@@ -73,7 +73,7 @@ const Sidebar = () => {
           </div>
         ) : (
           <Link
-            to="/signup"
+            to="/login"
             className="btn-primary flex gap-2 items-center w-full justify-center"
           >
             <div>
