@@ -4,6 +4,7 @@ import DashboardWrapper from './DashboardWrapper'
 import Dashboard from './pages/Dashboard'
 import Authentication from './pages/Authentication.page';
 import UserDetailsPage from './pages/UserDetails.page';
+import EventsPage from './pages/EventsPage';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path = "/reset-password/:token?" element={<Authentication />} />
           <Route path = "/forgot-password" element={<Authentication />} />
           <Route path = "/user-details" element={<UserDetailsPage />} />
+          <Route path = "/events" element={<EventsPage />} />
         </Routes>
       </DashboardWrapper>
   )
