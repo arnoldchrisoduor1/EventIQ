@@ -3,6 +3,7 @@ import sidebarOpenReducer from './slices/sidebarOpenSlice';
 import menuReducer from "./slices/menuSlice";
 import authReducer from "./slices/authSlice";
 import editProfileReducer from "./slices/editProfileSlice";
+import createEventReducer from"./slices/createEventSlice";
 
 const store = configureStore ({
     reducer: {
@@ -10,6 +11,7 @@ const store = configureStore ({
         menu: menuReducer,
         auth: authReducer,
         editProf: editProfileReducer,
+        createEvent: createEventReducer,
     },
     devTools: true,
 });

@@ -11,6 +11,7 @@ interface InputComponentTypes {
   isPassword?: boolean;
   value: string;
   name?: string;
+  id?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -22,7 +23,8 @@ const InputComponent: React.FC<InputComponentTypes> = ({
   isPassword,
   value,
   onChange,
-  name
+  name,
+  id
 }) => {
   const [hide, setHide] = useState(isPassword || false);
 
@@ -42,6 +44,7 @@ const InputComponent: React.FC<InputComponentTypes> = ({
             value={value}
             onChange={onChange}
             name={name}
+            id={id}
           />
         </div>
         {/* Password Toggle */}
