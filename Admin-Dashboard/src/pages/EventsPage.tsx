@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import AddEvent from "../components/EventsPage/AddEvent";
 import EventRecentActivity from "../components/EventsPage/EventRecentActivity";
 import EventsCard from "../components/EventsPage/EventsCard";
 import EventPieChart from "../components/EventsPage/PieChart";
@@ -7,6 +6,7 @@ import { Plus } from "lucide-react";
 import { RootState } from "@/redux/store";
 import { useAppDispatch } from "@/redux/hooks/hooks";
 import { setCreateEventState } from "@/redux/slices/createEventSlice";
+import { Link } from "react-router-dom";
 
 const EventsPage = () => {
 
@@ -20,7 +20,7 @@ const EventsPage = () => {
   return (
     <>
       <div className="flex gap-8 mt-10 mr-5">
-          <div className={`absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm ${createEventState ? 'block' : 'hidden'}`} /> 
+          {/* <div className={`absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm ${createEventState ? 'block' : 'hidden'}`} />  */}
         <div className=" flex-1 basis-3/4 ">
           <EventsCard />
           <EventsCard />
@@ -29,10 +29,10 @@ const EventsPage = () => {
         </div>
 
         <div className="flex-2 basis-1/4">
-        <div className="flex justify-center items-center gap-3 btn-primary mb-5" onClick={handleCreateEventState}>
+        <Link to="/create-event" className="flex justify-center items-center gap-3 btn-primary mb-5" onClick={handleCreateEventState}>
           <p className="text-xl">Create Event</p>
           <Plus />
-        </div>
+        </Link>
         <div className="floating-card justify-center p-4 rounded-xl hover:cursor-pointer border border-slate-300">
             <h2 className="text-start gray-header">Tickets Sold</h2>
           <div className="flex flex-row flex-wrap gap-8 justify-center">
@@ -75,9 +75,9 @@ const EventsPage = () => {
           </div>
         </div>
 
-        <div className={`absolute left-[50%] -translate-x-[50%] top-[50%] -translate-y-[50%] z-30 w-[60%] ${createEventState ? 'block' : 'hidden'}`}>
+        {/* <div className={`absolute left-[50%] -translate-x-[50%] top-[50%] -translate-y-[50%] z-30 w-[60%] ${createEventState ? 'block' : 'hidden'}`}>
         <AddEvent />
-      </div>
+      </div> */}
         
       </div>
     </>

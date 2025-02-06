@@ -159,11 +159,9 @@ export const updateprofile = createAsyncThunk(
 // ================ Logout Logic ======================= //
 export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
     try {
-        await axios.post(`${API_URL}/auth/logout`);
-        
         // Clear local storage
         localStorage.removeItem('user');
-        localStorage.removeItem('token');
+        await axios.post(`${API_URL}/auth/logout`);
     } catch(error: any) {
         return rejectWithValue(error || 'Error logging out');
     }

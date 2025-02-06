@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from './routes/auth.route';
+import eventsRoutes from "./routes/event.route";
 import { connectionDB } from "./db/connectDB";
 
 dotenv.config({ path: './src/.env' });
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("api/events", eventsRoutes)
 
 
 app.get("/", (req, res) => {

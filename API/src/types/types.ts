@@ -23,7 +23,7 @@ export interface ResetPasswordRequest {
     password: string;
 }
 
-interface ProfileRequest {
+export interface ProfileRequest {
     firstname?: string;
     lastname?: string;
     social_links?: {
@@ -34,4 +34,50 @@ interface ProfileRequest {
       website?: string;
     };
     profileImage?: string; // This will be the AWS S3 link
-  }
+}
+
+export interface EventRequest {
+    title: string;
+    description: string;
+    category: string;
+    banner: string;
+    date: Date;
+    time: string;
+    duration: number;
+    capacity: number;
+    location: {
+        name: string;
+        address: string;
+        city: string;
+        state: string;
+        country: string;
+        zipCode: string;
+        coordinates?: {
+            latitude: number;
+            longitude: number;
+        };
+    };
+    organizer: {
+        name: string;
+        contactEmail: string;
+        contactPhone?: string;
+        website?: string;
+    };
+}
+
+export interface EventUpdateRequest extends Partial<EventRequest> {}
+
+export interface TicketRequest {
+    eventId: string;
+    ticketType: string;
+    seatAssignment?: {
+        section?: string;
+        row?: string;
+        seatNumber?: string;
+    };
+}
+
+export interface TransferRequest {
+    toUserId: string;
+    transferReason?: string;
+}

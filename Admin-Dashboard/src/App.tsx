@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Authentication from './pages/Authentication.page';
 import UserDetailsPage from './pages/UserDetails.page';
 import EventsPage from './pages/EventsPage';
+import AddEvent from './pages/AddEvent';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Route path = "/forgot-password" element={<Authentication />} />
           <Route path = "/user-details" element={<UserDetailsPage />} />
           <Route path = "/events" element={<EventsPage />} />
+          <Route path = "/create-event" element={<AddEvent />} />
         </Routes>
       </DashboardWrapper>
   )

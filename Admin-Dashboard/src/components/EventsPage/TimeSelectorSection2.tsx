@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Calendar as CalendarIcon, MapPin } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
-import InputComponent from "../InputComponent";
 
-export default function TimeSelector() {
+export default function TimeSelectorSection2() {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState("10:15 AM");
   const [duration, setDuration] = useState("2h 45m");
@@ -35,9 +34,9 @@ export default function TimeSelector() {
 
   return (
     <div className="flex gap-4 items-center justify-between">
-      {/* Day Selector with Calendar */}
+      {/* Setup Date */}
       <div className="flex flex-col">
-        <label className="gray-header mb-0 text-center">Event Day</label>
+        <label className="gray-header mb-0 text-center">Setup Day</label>
         <Popover>
           <PopoverTrigger asChild>
             <div className="relative flex items-center border rounded-lg px-3 py-2 w-48 cursor-pointer hover:bg-gray-50">
@@ -56,39 +55,28 @@ export default function TimeSelector() {
         </Popover>
       </div>
 
-      {/* Time Selector */}
+      {/* Teardown Date */}
       <div className="flex flex-col">
-        <label className="gray-header mb-0 text-center">Start Time</label>
-        <Select value={time} onValueChange={setTime}>
-          <SelectTrigger className="w-32">
-            <SelectValue>{time}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {timeOptions.map((timeOption) => (
-              <SelectItem key={timeOption} value={timeOption}>
-                {timeOption}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <label className="gray-header mb-0 text-center">Tear Day</label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <div className="relative flex items-center border rounded-lg px-3 py-2 w-48 cursor-pointer hover:bg-gray-50">
+              <span className="flex-grow">{format(date, "dd MMMM yyyy")}</span>
+              <CalendarIcon className="w-5 h-5 text-gray-500" />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(newDate) => newDate && setDate(newDate)}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
       </div>
 
-      {/* Duration Selector */}
-      <div className="flex flex-col">
-        <label className="gray-header mb-0 text-center">Duration</label>
-        <Select value={duration} onValueChange={setDuration}>
-          <SelectTrigger className="w-28">
-            <SelectValue>{duration}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {durationOptions.map((durationOption) => (
-              <SelectItem key={durationOption} value={durationOption}>
-                {durationOption}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      
     </div>
   );
 }

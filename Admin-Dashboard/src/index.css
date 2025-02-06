@@ -14,7 +14,7 @@ body {
   }
 
   .btn {
-    @apply bg-white text-customBlue py-2 px-6 rounded-full border border-customBlue hover:bg-customBlue hover:text-white transition duration-custom;
+    @apply bg-white text-customBlue py-2 px-6 rounded-full border border-customBlue hover:cursor-pointer hover:bg-customBlue hover:text-white transition duration-custom;
   }
 
   .floating-card {
