@@ -336,7 +336,7 @@ const AddEvent = () => {
 
             <div className="border border-slate-300 mt-5 p-4">
             <h1 className="text-3xl font-semibold text-black/50">
-              Capacity and Restrictions
+              Scheduele and Program
             </h1>
             <div className="flex justify-center mb-4 mt-3">
               <ProfilePhotoUpload
@@ -361,7 +361,27 @@ const AddEvent = () => {
                 <InputComponent type="text" placeholder="Bio" Icon={MapPin} />
               </div>
               <div className="flex">
-                <InputComponent type="text" placeholder="Email" Icon={MapPin} />
+                <InputComponent type="email" placeholder="Email" Icon={MapPin} />
+              </div>
+            </div>
+            </div>
+
+            {/* Ticket pricing Tier */}
+            <div className="mt-5 border border-slate-300 p-4">
+            <h1 className="text-3xl font-semibold text-black/50">
+              Ticket Pricing Tiers
+            </h1>
+            <div>
+              <div>
+              <InputComponent type="text" placeholder="Name" Icon={MapPin} />
+              <InputComponent type="number" placeholder="Quantity" Icon={MapPin} />
+              </div>
+              <div>
+              <InputComponent type="text" placeholder="Descrition" Icon={MapPin} />
+              <InputComponent type="text" placeholder="Early Bird Date" Icon={MapPin} />
+              </div>
+              <div>
+              <InputComponent type="float" placeholder="Early Bird Price" Icon={MapPin} />
               </div>
             </div>
             </div>
