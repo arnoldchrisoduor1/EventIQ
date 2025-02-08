@@ -4,6 +4,7 @@ import menuReducer from "./slices/menuSlice";
 import authReducer from "./slices/authSlice";
 import editProfileReducer from "./slices/editProfileSlice";
 import createEventReducer from"./slices/createEventSlice";
+import addEventReducer from "./slices/addEventSlice";
 
 const store = configureStore ({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore ({
         auth: authReducer,
         editProf: editProfileReducer,
         createEvent: createEventReducer,
+        addEvent: addEventReducer,
     },
     devTools: true,
 });
