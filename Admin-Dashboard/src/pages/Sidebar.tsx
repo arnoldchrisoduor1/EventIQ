@@ -34,7 +34,7 @@ const Sidebar = () => {
             <img
               src={user.profileImage}
               alt="Profile Picture"
-              className="h-12 w-12 rounded-full"
+              className="h-full w-full object-cover rounded-full"
             />
           </div>
           <div>

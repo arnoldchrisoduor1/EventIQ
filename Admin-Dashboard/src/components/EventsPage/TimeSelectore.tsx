@@ -4,7 +4,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
-import InputComponent from "../InputComponent";
 
 export default function TimeSelector() {
   const [date, setDate] = useState(new Date());

@@ -53,6 +53,7 @@ const BasicInformation = () => {
         e.preventDefault();
         await dispatch(updateBasicInfo(formData));
         console.log('Updating basic info with...', formData);
+        console.log('Current state of basic Info...', basicInfo);
     };
 
     return (

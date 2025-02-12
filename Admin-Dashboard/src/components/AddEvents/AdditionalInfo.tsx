@@ -1,54 +1,43 @@
-import {  CheckCircle, ParkingCircle, Accessibility } from "lucide-react";
+import { CheckCircle, ParkingCircle, Accessibility, DollarSign, Info } from "lucide-react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import InputComponent from "../InputComponent";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { RootState } from "@/redux/store";
+import { updateAdditionalInfo } from "@/redux/slices/addEventSlice";
+// import { FormDataType } from "./types";
 
-// Define Types
-interface EntryRequirements {
+export interface EntryRequirements {
   dressCode: string;
   isRequired: boolean;
   additionalRequirements: string[];
 }
 
-interface Parking {
+export interface Parking {
   available: boolean;
   information: string;
   fee: number | "";
 }
 
-interface Accessibility {
+export interface Accessibility {
   wheelchairAccessible: boolean;
   assistanceAvailable: boolean;
   additionalInfo: string;
 }
 
-interface FormDataType {
+export interface FormDataType {
   entryRequirements: EntryRequirements;
   parking: Parking;
   accessibility: Accessibility;
 }
 
 const AdditionalInfo: React.FC = () => {
-  const [formData, setFormData] = useState<FormDataType>({
-    entryRequirements: {
-      dressCode: "",
-      isRequired: false,
-      additionalRequirements: [""],
-    },
-    parking: {
-      available: false,
-      information: "",
-      fee: "",
-    },
-    accessibility: {
-      wheelchairAccessible: false,
-      assistanceAvailable: false,
-      additionalInfo: "",
-    },
-  });
+  const dispatch = useDispatch();
+  const { additionalInfo } = useSelector((state: RootState) => state.addEvent);
 
-  // Generic Change Handler
+  const [formData, setFormData] = useState<FormDataType>(additionalInfo);
+
   const handleChange = <T extends keyof FormDataType, K extends keyof FormDataType[T]>(
     section: T,
     field: K,
@@ -63,111 +52,116 @@ const AdditionalInfo: React.FC = () => {
     }));
   };
 
+  const handleSave = () => {
+    dispatch(updateAdditionalInfo(formData));
+  };
+
   return (
-    <form className="space-y-6 p-4 border rounded-lg shadow-md">
-      <h1 className="text-3xl font-semibold text-black/70">Additional Information</h1>
+    <form className="space-y-6 p-6 bg-white rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold text-gray-800">Additional Information</h1>
 
       {/* Entry Requirements Section */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold flex items-center gap-2">
-          <CheckCircle /> Entry Requirements
-        </h2>
+      <Section title="Entry Requirements" icon={<CheckCircle />}>
         <InputComponent
           type="text"
           Icon={CheckCircle}
           placeholder="Dress Code"
-          id="dress-code"
           value={formData.entryRequirements.dressCode}
           onChange={(e) => handleChange("entryRequirements", "dressCode", e.target.value)}
         />
-        <div className="flex items-center gap-2">
-          <Switch
-            id="is-required"
-            checked={formData.entryRequirements.isRequired}
-            onCheckedChange={(value: boolean) => handleChange("entryRequirements", "isRequired", value)}
-          />
-          <label htmlFor="is-required">Is Required?</label>
-        </div>
+        <SwitchField
+          label="Is Required?"
+          checked={formData.entryRequirements.isRequired}
+          onChange={(value) => handleChange("entryRequirements", "isRequired", value)}
+        />
         <InputComponent
           type="text"
-          Icon={CheckCircle}
+          Icon={Info}
           placeholder="Additional Requirements (comma separated)"
-          id="additional-requirements"
           value={formData.entryRequirements.additionalRequirements.join(", ")}
           onChange={(e) =>
             handleChange("entryRequirements", "additionalRequirements", e.target.value.split(", "))
           }
         />
-      </div>
+      </Section>
 
       {/* Parking Section */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold flex items-center gap-2">
-          <ParkingCircle /> Parking
-        </h2>
-        <div className="flex items-center gap-2">
-          <Switch
-            id="parking-available"
-            checked={formData.parking.available}
-            onCheckedChange={(value: boolean) => handleChange("parking", "available", value)}
-          />
-          <label htmlFor="parking-available">Parking Available?</label>
-        </div>
+      <Section title="Parking" icon={<ParkingCircle />}>
+        <SwitchField
+          label="Parking Available?"
+          checked={formData.parking.available}
+          onChange={(value) => handleChange("parking", "available", value)}
+        />
         <InputComponent
-        Icon={CheckCircle}
+          Icon={Info}
           type="text"
           placeholder="Parking Information"
-          id="parking-info"
           value={formData.parking.information}
           onChange={(e) => handleChange("parking", "information", e.target.value)}
         />
         <InputComponent
           type="number"
-          Icon={CheckCircle}
+          Icon={DollarSign}
           placeholder="Parking Fee"
-          id="parking-fee"
-        //   value={formData.parking.fee}
+          value={formData.parking.fee}
           onChange={(e) => handleChange("parking", "fee", e.target.value === "" ? "" : Number(e.target.value))}
         />
-      </div>
+      </Section>
 
       {/* Accessibility Section */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold flex items-center gap-2">
-        <Accessibility /> Accessibility
-        </h2>
-        <div className="flex items-center gap-2">
-          <Switch
-            id="wheelchair-accessible"
-            checked={formData.accessibility.wheelchairAccessible}
-            onCheckedChange={(value: boolean) => handleChange("accessibility", "wheelchairAccessible", value)}
-          />
-          <label htmlFor="wheelchair-accessible">Wheelchair Accessible?</label>
-        </div>
-        <div className="flex items-center gap-2">
-          <Switch
-            id="assistance-available"
-            checked={formData.accessibility.assistanceAvailable}
-            onCheckedChange={(value: boolean) => handleChange("accessibility", "assistanceAvailable", value)}
-          />
-          <label htmlFor="assistance-available">Assistance Available?</label>
-        </div>
+      <Section title="Accessibility" icon={<Accessibility />}>
+        <SwitchField
+          label="Wheelchair Accessible?"
+          checked={formData.accessibility.wheelchairAccessible}
+          onChange={(value) => handleChange("accessibility", "wheelchairAccessible", value)}
+        />
+        <SwitchField
+          label="Assistance Available?"
+          checked={formData.accessibility.assistanceAvailable}
+          onChange={(value) => handleChange("accessibility", "assistanceAvailable", value)}
+        />
         <InputComponent
           type="text"
-          Icon={CheckCircle}
+          Icon={Info}
           placeholder="Additional Accessibility Info"
-          id="accessibility-info"
           value={formData.accessibility.additionalInfo}
           onChange={(e) => handleChange("accessibility", "additionalInfo", e.target.value)}
         />
-      </div>
+      </Section>
 
       {/* Save Button */}
-      <Button type="submit" className="w-full mt-4">
+      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSave}>
         Save Data
       </Button>
     </form>
   );
 };
+
+// Sub-components for better modularity
+const Section: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode }> = ({
+  title,
+  icon,
+  children,
+}) => (
+  <div className="space-y-4">
+    <h2 className="text-xl font-semibold flex items-center gap-2 text-gray-700">
+      {icon} {title}
+    </h2>
+    {children}
+  </div>
+);
+
+const SwitchField: React.FC<{
+  label: string;
+  checked: boolean;
+  onChange: (value: boolean) => void;
+}> = ({ label, checked, onChange }) => (
+  <div className="flex items-center gap-2">
+    <Switch id={label.toLowerCase().replace(/\s+/g, '-')} checked={checked} onCheckedChange={onChange} />
+    <label htmlFor={label.toLowerCase().replace(/\s+/g, '-')} className="text-gray-700">
+      {label}
+    </label>
+  </div>
+);
 
 export default AdditionalInfo;

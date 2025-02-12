@@ -78,8 +78,6 @@ const eventSchema = new mongoose.Schema({
     ageRestriction: {
         minimum: Number,
         maximum: Number,
-        required: Boolean,
-        default: false
     },
 
     organizer: {

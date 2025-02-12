@@ -19,11 +19,11 @@ const PersonalInfoCard = () => {
     <>
       <div className="flex w-full py-4 floating-card">
         <div className="flex flex-1 bassis-1/4 flex-col justify-center items-center">
-          <div className="p-1 bg-customBlue/50 rounded-full">
+          <div className="p-1 bg-customBlue/50 rounded-full w-16 h-16">
             <img
               src={user.profileImage}
               alt="Profile Picture"
-              className="h-16 w-16 rounded-full"
+              className="h-full w-full object-cover rounded-full"
             />
           </div>
           <div className="flex flex-col gap-3 mt-6">

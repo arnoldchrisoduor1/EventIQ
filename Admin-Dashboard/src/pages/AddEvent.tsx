@@ -12,10 +12,13 @@ import Scheduele_Program from "@/components/AddEvents/Scheduele_Program";
 import Ticket_Tiers from "@/components/AddEvents/Ticket_Tiers";
 import AdditionalInfo from "@/components/AddEvents/AdditionalInfo";
 import PoliciesForm from "@/components/AddEvents/PoliciesForm";
+import { useAppDispatch } from "@/redux/hooks/hooks";
+import { updateMedia } from "@/redux/slices/addEventSlice";
 
 const AddEvent = () => {
   const { media } = useSelector((state: RootState) => state.addEvent);
-  const [currentStep, setCurrentStep] = useState(7);
+  const [currentStep, setCurrentStep] = useState(6);
+  const dispatch = useAppDispatch();
 
   // Array of components to render
   const steps = [
@@ -29,9 +32,11 @@ const AddEvent = () => {
     { component: <PoliciesForm />, title: "Event Policies" },
   ];
 
-  function handleProfilePhotoChange(photoUrl: string): void {
-    throw new Error("Function not implemented.");
-  }
+  const handleProfilePhotoChange = async (photoUrl: any) => {
+    await dispatch(updateMedia({
+      banner: photoUrl
+    }));
+};
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
