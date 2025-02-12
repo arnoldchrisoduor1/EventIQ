@@ -115,7 +115,7 @@ const Schedule_Program = () => {
                     <img 
                         src={entry.speaker.photo || defaultImg}
                         alt="Speaker" 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover rounded-full"
                       />
                     </div>
                     <div>

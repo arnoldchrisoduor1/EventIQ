@@ -1,3 +1,9 @@
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { RootState } from '../store';
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 // types.ts
 export interface EventState {
@@ -97,10 +103,13 @@ export interface EventState {
       photography: string;
       weather: string;
     };
+    submission: {
+      loading: boolean;
+      error: string | null;
+      success: boolean;
+    }
   }
-  
   // slice.ts
-  import { createSlice, PayloadAction } from '@reduxjs/toolkit';
   
   const initialState: EventState = {
     basicInfo: {
@@ -178,6 +187,11 @@ export interface EventState {
       photography: '',
       weather: '',
     },
+    submission: {
+      loading: false,
+      error: null,
+      success: false,
+    },
   };
   
   const eventSlice = createSlice({
@@ -232,8 +246,69 @@ export interface EventState {
       updatePolicies: (state, action: PayloadAction<Partial<EventState['policies']>>) => {
         state.policies = { ...state.policies, ...action.payload };
       },
+      resetSubmissionStatus: (state) => {
+        state.submission = {
+          loading: false,
+          error: null,
+          success: false,
+        };
+      },
+    },
+    extraReducers: (builder) => {
+      builder
+        .addCase(submitEvent.pending, (state) => {
+          state.submission.loading = true;
+          state.submission.error = null;
+          state.submission.success = false;
+        })
+        .addCase(submitEvent.fulfilled, (state) => {
+          state.submission.loading = false;
+          state.submission.error = null;
+          state.submission.success = true;
+        })
+        .addCase(submitEvent.rejected, (state, action) => {
+          state.submission.loading = false;
+          state.submission.error = action.payload as string;
+          state.submission.success = false;
+        });
     },
   });
+
+
+  export const submitEvent = createAsyncThunk(
+    'event/submit',
+    async (_, { getState, rejectWithValue }) => {
+      try {
+        const state = getState() as RootState;  // Change this line
+        const eventData = state.addEvent;  // Change this line to match your reducer name
+        
+        console.log('State being sent:', eventData);
+        
+        if (!eventData.basicInfo.title) {
+          return rejectWithValue('Title is required');
+        }
+  
+        const response = await axios.post(
+          `${API_URL}/events/events`, 
+          eventData,  // Send eventData instead of state.event
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          }
+        );
+  
+        return response.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const message = error.response?.data?.message || error.message || 'Failed to create event';
+          return rejectWithValue(message);
+        }
+        return rejectWithValue('Failed to create event');
+      }
+    }
+  );
   
   export const {
     updateBasicInfo,
@@ -250,6 +325,7 @@ export interface EventState {
     removeTicketTier,
     updateAdditionalInfo,
     updatePolicies,
+    resetSubmissionStatus
   } = eventSlice.actions;
   
   export default eventSlice.reducer;

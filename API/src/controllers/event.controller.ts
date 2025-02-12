@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import {Event} from '../models/event.model';
+import { Event } from '../models/event.model';
 import { EventRequest, EventUpdateRequest } from '../types/types';
 
 // Create Event
@@ -9,27 +9,47 @@ export const createEvent = async (
 ): Promise<void> => {
     try {
         const {
-            title,
-            description,
-            category,
-            banner,
-            date,
-            time,
-            duration,
+            basicInfo,
+            media,
+            datetime,
             capacity,
             location,
             organizer
         } = req.body;
 
+
         // Validate required fields
-        if (!title || !description || !category || !banner || !date || !time || !duration || !capacity) {
-            throw new Error('Missing required fields');
-        }
+        if (!basicInfo?.title) {
+            throw new Error('Missing required field: Title');
+          }
+          if (!basicInfo?.description) {
+            throw new Error('Missing required field: Description');
+          }
+          if (!basicInfo?.category) {
+            throw new Error('Missing required field: Category');
+          }
+          if (!media?.banner) {
+            throw new Error('Missing required field: Banner');
+          }
+          if (!datetime?.date) {
+            throw new Error('Missing required field: Date');
+          }
+          if (!datetime?.time) {
+            throw new Error('Missing required field: Time');
+          }
+          if (!datetime?.duration) {
+            throw new Error('Missing required field: Duration');
+          }
+          if (!capacity?.total) {
+            throw new Error('Missing required field: Total Capacity');
+          }
 
         const event = new Event({
             ...req.body,
-            status: 'draft',
-            createdAt: new Date()
+            basicInfo: {
+                ...req.body.basicInfo,
+                status: 'draft'
+            }
         });
 
         await event.save();
@@ -66,13 +86,13 @@ export const getEvents = async (
 
         const query: any = {};
 
-        // Apply filters
-        if (category) query.category = category;
-        if (status) query.status = status;
+        // Apply filters with updated paths
+        if (category) query['basicInfo.category'] = category;
+        if (status) query['basicInfo.status'] = status;
         if (startDate && endDate) {
-            query.date = {
-                $gte: new Date(startDate as string),
-                $lte: new Date(endDate as string)
+            query['datetime.date'] = {
+                $gte: startDate,
+                $lte: endDate
             };
         }
 
@@ -81,7 +101,7 @@ export const getEvents = async (
         const events = await Event.find(query)
             .skip(skip)
             .limit(Number(limit))
-            .sort({ date: 1 });
+            .sort({ 'datetime.date': 1 });
 
         const total = await Event.countDocuments(query);
 
@@ -150,10 +170,7 @@ export const updateEvent = async (
 
         const updatedEvent = await Event.findByIdAndUpdate(
             req.params.id,
-            {
-                ...req.body,
-                updatedAt: new Date()
-            },
+            req.body,
             { new: true }
         );
 

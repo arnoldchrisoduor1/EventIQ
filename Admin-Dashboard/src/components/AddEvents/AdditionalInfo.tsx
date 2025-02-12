@@ -1,9 +1,8 @@
 import { CheckCircle, ParkingCircle, Accessibility, DollarSign, Info } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InputComponent from "../InputComponent";
 import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
 import { RootState } from "@/redux/store";
 import { updateAdditionalInfo } from "@/redux/slices/addEventSlice";
 // import { FormDataType } from "./types";
@@ -52,9 +51,15 @@ const AdditionalInfo: React.FC = () => {
     }));
   };
 
-  const handleSave = () => {
-    dispatch(updateAdditionalInfo(formData));
+  const handleSave = async(e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log("Tryng to save the additional Info:", formData);
+    await dispatch(updateAdditionalInfo(formData));
   };
+
+  useEffect(() => {
+    console.log("Updated additional info: ", additionalInfo);
+  },[additionalInfo]);
 
   return (
     <form className="space-y-6 p-6 bg-white rounded-lg shadow-lg">
@@ -130,9 +135,9 @@ const AdditionalInfo: React.FC = () => {
       </Section>
 
       {/* Save Button */}
-      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSave}>
+      <button className="btn-primary" onClick={handleSave}>
         Save Data
-      </Button>
+      </button>
     </form>
   );
 };

@@ -47,7 +47,7 @@ const Sidebar = () => {
             <img
               src={logo}
               alt="Profile Picture"
-              className="h-12 w-12 rounded-full"
+              className="h-full w-full object-cover rounded-full"
             />
           </div>
           <div className="text-2xl font-semibold">Events<span className="text-customBlue">IQ</span></div>

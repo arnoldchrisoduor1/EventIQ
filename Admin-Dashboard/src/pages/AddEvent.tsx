@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BannerImageUpload from "@/components/EventsPage/BannerImageUpload";
 import defaultBanner from "../assets/img/eventsBanner1.jpg";
 import { useSelector } from "react-redux";
@@ -13,17 +13,18 @@ import Ticket_Tiers from "@/components/AddEvents/Ticket_Tiers";
 import AdditionalInfo from "@/components/AddEvents/AdditionalInfo";
 import PoliciesForm from "@/components/AddEvents/PoliciesForm";
 import { useAppDispatch } from "@/redux/hooks/hooks";
-import { updateMedia } from "@/redux/slices/addEventSlice";
+import { submitEvent, updateMedia } from "@/redux/slices/addEventSlice";
 
 const AddEvent = () => {
   const { media } = useSelector((state: RootState) => state.addEvent);
-  const [currentStep, setCurrentStep] = useState(6);
+  const eventState = useSelector((state: RootState) => state.addEvent);
+  const [currentStep, setCurrentStep] = useState(0);
   const dispatch = useAppDispatch();
 
   // Array of components to render
   const steps = [
     { component: <BasicInformation />, title: "Basic Information" },
-    { component: <AddFiles />, title: "Add Files" },
+    // { component: <AddFiles />, title: "Add Files" },
     { component: <ManagingTimes />, title: "Manage Times" },
     { component: <LocationSelector />, title: "Location Selection" },
     { component: <Scheduele_Program />, title: "Sheduele and Program" },
@@ -49,6 +50,14 @@ const AddEvent = () => {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  const handleCreateEvent = async() => {
+    await dispatch(submitEvent());
+  }
+
+  useEffect(() => {
+    console.log("The Entire Event State: ", eventState);
+  }, [eventState]);
 
   return (
     <>
@@ -80,16 +89,22 @@ const AddEvent = () => {
             Previous
           </button>
 
-          <button
-            onClick={handleNext}
-            disabled={currentStep === steps.length - 1}
-            className={`flex gap-3 items-center btn-primary w-[150px] justify-center ${
-              currentStep === steps.length - 1 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            Next
-            <ArrowRight size={20} />
-          </button>
+            {currentStep === steps.length - 1 ?
+            <button onClick={handleCreateEvent} className="btn-primary w-[150px]">Submit</button>
+                       :
+             <button
+             onClick={handleNext}
+             disabled={currentStep === steps.length - 1}
+             className={`flex gap-3 items-center btn-primary w-[150px] justify-center ${
+               currentStep === steps.length - 1 ? "opacity-50 cursor-not-allowed" : ""
+             }`}
+           >
+             Next
+             <ArrowRight size={20} />
+           </button>
+            }
+          
+
           </div>
         </div>
 
