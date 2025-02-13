@@ -96,6 +96,8 @@ export const getEvents = async (
             };
         }
 
+        // pagination
+
         const skip = (Number(page) - 1) * Number(limit);
 
         const events = await Event.find(query)
