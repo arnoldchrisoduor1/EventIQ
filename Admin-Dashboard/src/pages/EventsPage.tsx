@@ -33,6 +33,7 @@ const EventsPage = () => {
           <p className="text-xl">Create Event</p>
           <Plus />
         </Link>
+        {/* Tickets statistics section */}
         <div className="floating-card justify-center p-4 rounded-xl hover:cursor-pointer border border-slate-300">
             <h2 className="text-start gray-header">Tickets Sold</h2>
           <div className="flex flex-row flex-wrap gap-8 justify-center">
@@ -53,7 +54,7 @@ const EventsPage = () => {
             <div className="flex flex-col items-center">
               <EventPieChart total={200} sold={102} progressColor="#feb558" />
               <p className="mt-2">
-                BackStage <span className="text-black/50">Pass</span>
+                Backstage <span className="text-black/50">Pass</span>
               </p>
             </div>
 

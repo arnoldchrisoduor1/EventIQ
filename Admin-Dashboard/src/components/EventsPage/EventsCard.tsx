@@ -3,15 +3,15 @@ import bgImage from "../../assets/img/eventsBanner1.jpg";
 
 const EventsCard = () => {
   return (
-    <div className="relative p-10 border border-slate-400 rounded-xl overflow-hidden mb-5 floating-card hover:cursor-pointer">
+    <div className="relative p-10 border  rounded-xl overflow-hidden mb-5 floating-card hover:cursor-pointer">
       {/* Background Image */}
-      <div
+      {/* <div
         className="absolute inset-0 bg-cover bg-center blur-md opacity-50"
         style={{ backgroundImage: `url(${bgImage})` }}
-      />
+      /> */}
 
       {/* Blue Tint Overlay */}
-      <div className="absolute inset-0 bg-customBlue/30 hover:bg-customBlue transition duration-custom opacity-60 mix-blend-multiply z-10" />
+      <div className="absolute inset-0 bg-customBlue/30 hover:bg-customBlue/40 transition duration-custom opacity-60 mix-blend-multiply z-10" />
 
       {/* Content */}
       <div className="relative flex flex-row justify-between">
