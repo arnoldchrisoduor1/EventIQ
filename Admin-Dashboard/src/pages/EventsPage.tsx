@@ -62,7 +62,7 @@ const EventsPage = () => {
               <div className="border-2 border-slate-400 p-10 rounded-full hover:border-slate-600 cursor-pointer">
                 <Plus />
               </div>
-              <p className="mt-2">Create New</p>
+              <p className="mt-2">Create</p>
             </div>
           </div>
           </div>
