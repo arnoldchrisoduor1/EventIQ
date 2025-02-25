@@ -15,7 +15,7 @@ router.get('/events', getEvents);
 router.get('/events/:id', getEvent);
 
 // Protected routes
-router.use(verifyToken);
+// router.use(verifyToken);
 router.post('/events', createEvent);
 router.put('/events/:id', updateEvent);
 router.delete('/events/:id', deleteEvent);

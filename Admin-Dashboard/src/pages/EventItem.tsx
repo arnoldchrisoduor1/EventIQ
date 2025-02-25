@@ -4,6 +4,8 @@ import { Facebook, Twitter, Youtube } from "lucide-react";
 import { useSelector } from "react-redux";
 import EventScheduele from "@/components/EventItem/EventScheduele";
 import { useLocation } from "react-router";
+import EventTicketBanner from "@/components/EventItem/EventTicketBanner";
+import EventsPieChart from "@/components/EventsPage/PieChart";
 
 const EventItem = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -36,10 +38,8 @@ const EventItem = () => {
               </div>
             </div>
 
-            <div className="bg-customGreen/10 inline-block p-4 rounded-3xl mt-5">
-              <p className="text-xl italic font-extralight">
-                "{event.basicInfo.description}"
-              </p>
+            <div>
+              <EventTicketBanner banner={event.media.banner} description={event.basicInfo.description} />
             </div>
 
             <div className="flex flex-col gap-3">
@@ -94,7 +94,7 @@ const EventItem = () => {
                 {
                   event.schedule?.map((item, idx) => (
                     <div key={idx}>
-                      <EventScheduele name={item.speaker.name} time={item.time} title={item.title} description={item.description} image={item.photo} />
+                      <EventScheduele name={item.speaker.name} time={item.time} title={item.title} description={item.description} image={item.speaker.photo} />
                     </div>
                   ))
                 }
@@ -190,39 +190,30 @@ const EventItem = () => {
             </div>
           </div>
 
-          <div className="mt-10 p-4 hover:cursor-pointer">
-            <h2 className="gray-header">Recent Activities</h2>
-            <EventRecentActivity
-              name="Arnold"
-              ticket="3 standard"
-              time="3"
-              timetag="mins"
-            />
-            <EventRecentActivity
-              name="Arnold"
-              ticket="3 standard"
-              time="3"
-              timetag="mins"
-            />
-            <EventRecentActivity
-              name="Arnold"
-              ticket="3 standard"
-              time="3"
-              timetag="mins"
-            />
-            <EventRecentActivity
-              name="Arnold"
-              ticket="3 standard"
-              time="3"
-              timetag="mins"
-            />
-            <EventRecentActivity
-              name="Arnold"
-              ticket="3 standard"
-              time="3"
-              timetag="mins"
-            />
-          </div>
+          <div className="flex flex-row flex-wrap gap-8 justify-center">
+              <div className="flex flex-col items-center">
+                <EventsPieChart total={200} sold={161} />
+                <p className="mt-2">
+                  VIP <span className="text-black/50">seat</span>
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <EventsPieChart total={200} sold={93} progressColor="#ff7556" />
+                <p className="mt-2">
+                  Standard <span className="text-black/50">seat</span>
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <EventsPieChart total={200} sold={102} progressColor="#feb558" />
+                <p className="mt-2">
+                  Backstage <span className="text-black/50">Pass</span>
+                </p>
+              </div>
+
+              
+            </div>
         </div>
       </div>
     </>

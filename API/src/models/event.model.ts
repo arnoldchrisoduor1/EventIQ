@@ -73,7 +73,7 @@ const eventSchema = new mongoose.Schema({
   capacity: {
     total: {
       type: Number,
-      required: true
+      // required: true
     },
     ageRestriction: {
       minimum: Number,

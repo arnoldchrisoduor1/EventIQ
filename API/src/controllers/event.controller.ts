@@ -40,9 +40,9 @@ export const createEvent = async (
           if (!datetime?.duration) {
             throw new Error('Missing required field: Duration');
           }
-          if (!capacity?.total) {
-            throw new Error('Missing required field: Total Capacity');
-          }
+        //   if (!capacity?.total) {
+        //     throw new Error('Missing required field: Total Capacity');
+        //   }
 
         const event = new Event({
             ...req.body,
