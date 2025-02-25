@@ -6,11 +6,16 @@
 
 body {
   @apply font-sans;
+  @apply scrollbar-thin scrollbar-thumb-customBlue/30 scrollbar-track-customBlue/10;
 }
 
 @layer components {
   .btn-primary {
     @apply bg-customBlue/80 text-white py-2 px-4 rounded-full hover:bg-customBlue hover:cursor-pointer transition duration-custom;
+  }
+
+  .btn-green {
+    @apply bg-customGreen/80 text-white py-2 px-4 rounded-full hover:bg-customGreen hover:cursor-pointer transition duration-custom;
   }
 
   .btn {

@@ -1,17 +1,17 @@
 import { FilePenLine } from "lucide-react";
 import bgImage from "../../assets/img/eventsBanner1.jpg";
 
-const EventsCard = () => {
+const EventsCard = ({title, banner}) => {
   return (
-    <div className="relative p-10 border  rounded-xl overflow-hidden mb-5 floating-card hover:cursor-pointer">
+    <div className="relative p-10 bg-customBlue/10 overflow-hidden mb-5 floating-card hover:cursor-pointer">
       {/* Background Image */}
       {/* <div
         className="absolute inset-0 bg-cover bg-center blur-md opacity-50"
-        style={{ backgroundImage: `url(${bgImage})` }}
+        style={{ backgroundImage: `url(${banner})` }}
       /> */}
 
       {/* Blue Tint Overlay */}
-      <div className="absolute inset-0 bg-customBlue/30 hover:bg-customBlue/40 transition duration-custom opacity-60 mix-blend-multiply z-10" />
+      <div className="absolute inset-0 hover:bg-customBlue/40 transition duration-custom opacity-60 mix-blend-multiply z-10" />
 
       {/* Content */}
       <div className="relative flex flex-row justify-between">
@@ -29,7 +29,7 @@ const EventsCard = () => {
 
             {/* Right Section */}
             <div>
-              <p className="text-4xl">Ultimate Championship 2026</p>
+              <p className="text-4xl">{title}</p>
             </div>
           </div>
 
@@ -38,7 +38,7 @@ const EventsCard = () => {
             {/* Selling Starts */}
             <div>
               <p>Selling Starts</p>
-              <p className="text-customOrange">Started</p>
+              <p className="text-customGreen">Started</p>
             </div>
             {/* Selling Ends */}
             <div>
@@ -83,7 +83,7 @@ const EventsCard = () => {
 
           {/* Lower Section */}
           <div className="text-right hover:cursor-pointer z-20">
-            <div className="inline-block border-4 border-customOrange hover:bg-customOrange/50 p-2 w-fit rounded-full transition duration-custom">
+            <div className="inline-block border-2 border-customBlue hover:bg-customOrange/50 p-2 w-fit rounded-full transition duration-custom">
               <div className="flex gap-2 items-center">
                 <FilePenLine size={17} />
                 <p>Edit Event</p>

@@ -6,6 +6,7 @@ import Authentication from './pages/Authentication.page';
 import UserDetailsPage from './pages/UserDetails.page';
 import EventsPage from './pages/EventsPage';
 import AddEvent from './pages/AddEvent';
+import EventItem from './pages/EventItem';
 
 function App() {
 
@@ -19,8 +20,11 @@ function App() {
           <Route path = "/reset-password/:token?" element={<Authentication />} />
           <Route path = "/forgot-password" element={<Authentication />} />
           <Route path = "/user-details" element={<UserDetailsPage />} />
+          
+          {/* EVENTS ROUTES */}
           <Route path = "/events" element={<EventsPage />} />
           <Route path = "/create-event" element={<AddEvent />} />
+          <Route path = "/eventItem" element={<EventItem />} />
         </Routes>
       </DashboardWrapper>
   )
