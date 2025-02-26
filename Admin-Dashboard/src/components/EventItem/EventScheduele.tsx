@@ -1,9 +1,13 @@
+import { Menu } from "lucide-react";
 import defaultImage from "../../assets/img/logo.png";
 
 const EventScheduele = ({name, time, title, description, image}) => {
   return (
     <div className="mt-5 hover:cursor-pointer">
       <div className="grid grid-cols-4 border hover:border-black/50 transition duration-custom p-4">
+        {/* <div>
+          <Menu />    
+        </div> */}
         <div className="w-10 h-10 rounded-full overflow-hidden">
           <img
             src={image || defaultImage}

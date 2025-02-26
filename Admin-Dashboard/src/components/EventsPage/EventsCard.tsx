@@ -1,5 +1,4 @@
 import { FilePenLine } from "lucide-react";
-import bgImage from "../../assets/img/eventsBanner1.jpg";
 
 const EventsCard = ({title, banner}) => {
   return (

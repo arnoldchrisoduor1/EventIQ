@@ -1,4 +1,3 @@
-import EventRecentActivity from "@/components/EventsPage/EventRecentActivity";
 import { RootState } from "@/redux/store";
 import { Facebook, Twitter, Youtube } from "lucide-react";
 import { useSelector } from "react-redux";
@@ -6,6 +5,22 @@ import EventScheduele from "@/components/EventItem/EventScheduele";
 import { useLocation } from "react-router";
 import EventTicketBanner from "@/components/EventItem/EventTicketBanner";
 import EventsPieChart from "@/components/EventsPage/PieChart";
+import GetTicket from "@/components/EventItem/GetTicket";
+
+const TicketComponent = ({
+  name,
+  quantity,
+}: {
+  name: string;
+  quantity: number;
+}) => (
+  <div className="flex flex-col items-center">
+    <EventsPieChart total={quantity} sold={102} progressColor="#feb558" />
+    <p className="mt-2">
+      {name} <span className="text-black/50">Pass</span>
+    </p>
+  </div>
+);
 
 const EventItem = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -13,8 +28,8 @@ const EventItem = () => {
   const location = useLocation();
   const event = location.state?.event;
 
-  if(!event) {
-    return <p className="text-red-500">No Event Selected</p>
+  if (!event) {
+    return <p className="text-red-500">No Event Selected</p>;
   }
 
   console.log(event.schedule);
@@ -39,8 +54,17 @@ const EventItem = () => {
             </div>
 
             <div>
-              <EventTicketBanner banner={event.media.banner} description={event.basicInfo.description} />
+              <p className="px-5 py-2 bg-customBlue/30 font-extralight inline-block rounded-full italic text-xl my-2">
+                {event.basicInfo.description}
+              </p>
             </div>
+
+
+            <div>
+              <EventTicketBanner banner={event.media.banner} />
+            </div>
+
+            {/* <GetTicket /> */}
 
             <div className="flex flex-col gap-3">
               <div className="border-b border-gray-300 pb-5">
@@ -60,7 +84,9 @@ const EventItem = () => {
                   </div>
                   <div className="text-start">
                     <p className="text-lg">Teardown Time</p>
-                    <p className="text-black/50">{event.datetime.teardownTime}</p>
+                    <p className="text-black/50">
+                      {event.datetime.teardownTime}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -90,14 +116,18 @@ const EventItem = () => {
 
             {/* SCHEDUELE */}
             <div className="mt-5">
-                <h1 className="text-2xl text-black/50">Scheduele</h1>
-                {
-                  event.schedule?.map((item, idx) => (
-                    <div key={idx}>
-                      <EventScheduele name={item.speaker.name} time={item.time} title={item.title} description={item.description} image={item.speaker.photo} />
-                    </div>
-                  ))
-                }
+              <h1 className="text-2xl text-black/50">Scheduele</h1>
+              {event.schedule?.map((item, idx) => (
+                <div key={idx}>
+                  <EventScheduele
+                    name={item.speaker.name}
+                    time={item.time}
+                    title={item.title}
+                    description={item.description}
+                    image={item.speaker.photo}
+                  />
+                </div>
+              ))}
             </div>
 
             <div className="flex flex-col gap-3 mt-5">
@@ -106,19 +136,34 @@ const EventItem = () => {
                 <div className="grid grid-cols-4">
                   <div className="text-start">
                     <p className="text-lg">Dress Requirements</p>
-                    <p className="text-black/50">{event.additionalInfo.entryRequirements.dressCode}</p>
+                    <p className="text-black/50">
+                      {event.additionalInfo.entryRequirements.dressCode}
+                    </p>
                   </div>
                   <div className="text-start">
                     <p className="text-lg">Parking</p>
-                    <p className="text-black/50">$ { event.additionalInfo.parking.available ? event.additionalInfo.parking.fee : "N/A"}</p>
+                    <p className="text-black/50">
+                      ${" "}
+                      {event.additionalInfo.parking.available
+                        ? event.additionalInfo.parking.fee
+                        : "N/A"}
+                    </p>
                   </div>
                   <div className="text-start">
                     <p className="text-lg">Wheel Chair</p>
-                    <p className="text-black/50">{event.additionalInfo.accessibility.wheelchairAccessibile ? "Yes" : "No"}</p>
+                    <p className="text-black/50">
+                      {event.additionalInfo.accessibility.wheelchairAccessibile
+                        ? "Yes"
+                        : "No"}
+                    </p>
                   </div>
                   <div className="text-start">
                     <p className="text-lg">Assistance</p>
-                    <p className="text-black/50">{event.additionalInfo.accessibility.assistanceAvailable ? event.additionalInfo.accessibility.additionalInfo : "No"}</p>
+                    <p className="text-black/50">
+                      {event.additionalInfo.accessibility.assistanceAvailable
+                        ? event.additionalInfo.accessibility.additionalInfo
+                        : "No"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -132,11 +177,15 @@ const EventItem = () => {
                   </div>
                   <div className="text-start">
                     <p className="text-lg">Cancellation</p>
-                    <p className="text-black/50">{event.policies.cancellation}</p>
+                    <p className="text-black/50">
+                      {event.policies.cancellation}
+                    </p>
                   </div>
                   <div className="text-start">
                     <p className="text-lg">Photography</p>
-                    <p className="text-black/50">{event.policies.photography}</p>
+                    <p className="text-black/50">
+                      {event.policies.photography}
+                    </p>
                   </div>
                   <div className="text-start">
                     <p className="text-lg">Weather</p>
@@ -190,30 +239,18 @@ const EventItem = () => {
             </div>
           </div>
 
-          <div className="flex flex-row flex-wrap gap-8 justify-center">
-              <div className="flex flex-col items-center">
-                <EventsPieChart total={200} sold={161} />
-                <p className="mt-2">
-                  VIP <span className="text-black/50">seat</span>
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <EventsPieChart total={200} sold={93} progressColor="#ff7556" />
-                <p className="mt-2">
-                  Standard <span className="text-black/50">seat</span>
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <EventsPieChart total={200} sold={102} progressColor="#feb558" />
-                <p className="mt-2">
-                  Backstage <span className="text-black/50">Pass</span>
-                </p>
-              </div>
-
-              
+          <div>
+            <h1 className="gray-header text-center mt-5">Tickets</h1>
+            <div className="flex flex-row flex-wrap gap-8 justify-center">
+              {event.ticketing.map((item, idx) => (
+                <TicketComponent
+                  key={idx}
+                  name={item.name}
+                  quantity={item.price}
+                />
+              ))}
             </div>
+          </div>
         </div>
       </div>
     </>
