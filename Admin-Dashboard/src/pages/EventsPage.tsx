@@ -65,7 +65,8 @@ const EventsPage = () => {
               <div key={idx} onClick={() => handleEventClick(event)} className="cursor-pointer">
                 <EventsCard 
                   title={event.basicInfo.title} 
-                  banner={event.media.banner}
+                  price={event.ticketing[0].price}
+                  quantity={event.ticketing[0].quantity}
                 />
             </div>
             ))

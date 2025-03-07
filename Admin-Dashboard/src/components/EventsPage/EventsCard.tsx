@@ -1,6 +1,6 @@
 import { FilePenLine } from "lucide-react";
 
-const EventsCard = ({title, banner}) => {
+const EventsCard = ({title, price, quantity} : { title: string, price: number, quantity: number }) => {
   return (
     <div className="relative p-10 bg-customBlue/10 overflow-hidden mb-5 floating-card hover:cursor-pointer">
       {/* Background Image */}
@@ -54,7 +54,7 @@ const EventsCard = ({title, banner}) => {
             {/* Tickets Left */}
             <div>
               <p>Tickets Left</p>
-              <p className="text-black">112</p>
+              <p className="text-black">{quantity}</p>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@ const EventsCard = ({title, banner}) => {
             {/* Price */}
             <div>
               <p className="text-sm text-black/50">Entry Fee</p>
-              <p className="text-xl">$ 34</p>
+              <p className="text-xl">$ {price}</p>
             </div>
           </div>
 

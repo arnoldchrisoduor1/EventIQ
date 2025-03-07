@@ -54,11 +54,10 @@ const EventItem = () => {
             </div>
 
             <div>
-              <p className="px-5 py-2 bg-customBlue/30 font-extralight inline-block rounded-full italic text-xl my-2">
+              <p className="px-5 py-2 bg-customBlue/20 font-extralight inline-block rounded-full italic text-xl my-2">
                 {event.basicInfo.description}
               </p>
             </div>
-
 
             <div>
               <EventTicketBanner banner={event.media.banner} />
